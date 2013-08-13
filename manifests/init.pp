@@ -19,7 +19,6 @@
 #
 # $listen::           Should the puppet agent listen for connections.
 #                     type:boolean
-#
 # $pluginsync::       Enable pluginsync.
 #                     type:boolean
 #
@@ -131,14 +130,16 @@
 #                           using git_repo, by default a git describe approach
 #                           will be installed.
 #
-# $foreman_url::            Foreman URL
-#
-# $facts::                  Should foreman receive facts from puppet
+# $server_facts::           Should foreman receive facts from puppet
 #                           type:boolean
 #
-# $puppet_basedir::         Where is the puppet code base located
+# $server_foreman_url::     Foreman URL
 #
-# $puppet_home::            Puppet var directory
+# $server_puppet_basedir::  Where is the puppet code base located
+#
+# $server_puppet_home::     Puppet var directory
+#
+# $server_reports::         List of report types to include on the puppetmaster
 #
 # === Usage:
 #
@@ -160,55 +161,66 @@
 #   }
 #
 class puppet (
-  $version                     = $puppet::params::version,
-  $user                        = $puppet::params::user,
-  $group                       = $puppet::params::group,
-  $dir                         = $puppet::params::dir,
-  $port                        = $puppet::params::port,
-  $listen                      = $puppet::params::listen,
-  $pluginsync                  = $puppet::params::pluginsync,
-  $splay                       = $puppet::params::splay,
-  $runinterval                 = $puppet::params::runinterval,
-  $runmode                     = $puppet::params::runmode,
-  $agent_noop                  = $puppet::params::agent_noop,
-  $show_diff                   = $puppet::params::show_diff,
-  $ca_server                   = $puppet::params::ca_server,
-  $agent_template              = $puppet::params::agent_template,
-  $auth_template               = $puppet::params::auth_template,
-  $nsauth_template             = $puppet::params::nsauth_template,
-  $client_package              = $puppet::params::client_package,
-  $server                      = $puppet::params::server,
-  $server_user                 = $puppet::params::user,
-  $server_group                = $puppet::params::group,
-  $server_dir                  = $puppet::params::dir,
-  $server_port                 = $puppet::params::port,
-  $server_vardir               = $puppet::params::server_vardir,
-  $server_ca                   = $puppet::params::server_ca,
-  $server_reports              = $puppet::params::server_reports,
-  $server_passenger            = $puppet::params::server_passenger,
-  $server_service_fallback     = $puppet::params::server_service_fallback,
-  $server_passenger_max_pool   = $puppet::params::server_passenger_max_pool,
-  $server_httpd_service        = $puppet::params::server_httpd_service,
-  $server_external_nodes       = $puppet::params::server_external_nodes,
-  $server_template             = $puppet::params::server_template,
-  $server_config_version       = $puppet::params::server_config_version,
-  $server_git_repo             = $puppet::params::server_git_repo,
-  $server_environments         = $puppet::params::server_environments,
-  $server_envs_dir             = $puppet::params::server_envs_dir,
-  $server_manifest_path        = $puppet::params::server_manifest_path,
-  $server_common_modules_path  = $puppet::params::server_common_modules_path,
-  $server_git_repo_path        = $puppet::params::server_git_repo_path,
-  $server_post_hook_content    = $puppet::params::server_post_hook_content,
-  $server_post_hook_name       = $puppet::params::server_post_hook_name,
-  $server_storeconfigs_backend = $puppet::params::server_storeconfigs_backend,
-  $server_app_root             = $puppet::params::server_app_root,
-  $server_ssl_dir              = $puppet::params::server_ssl_dir,
-  $server_package              = $puppet::params::server_package,
-  $server_foreman_url          = $foreman::params::foreman_url,
-  $server_facts                = $foreman::params::facts,
-  $server_puppet_home          = $foreman::params::puppet_home,
-  $server_puppet_basedir       = $foreman::params::puppet_basedir
+  $version                      = $puppet::params::version,
+  $user                         = $puppet::params::user,
+  $group                        = $puppet::params::group,
+  $dir                          = $puppet::params::dir,
+  $port                         = $puppet::params::port,
+  $listen                       = $puppet::params::listen,
+  $pluginsync                   = $puppet::params::pluginsync,
+  $splay                        = $puppet::params::splay,
+  $runinterval                  = $puppet::params::runinterval,
+  $runmode                      = $puppet::params::runmode,
+  $agent_noop                   = $puppet::params::agent_noop,
+  $show_diff                    = $puppet::params::show_diff,
+  $ca_server                    = $puppet::params::ca_server,
+  $agent_template               = $puppet::params::agent_template,
+  $auth_template                = $puppet::params::auth_template,
+  $nsauth_template              = $puppet::params::nsauth_template,
+  $client_package               = $puppet::params::client_package,
+  $server                       = $puppet::params::server,
+  $server_user                  = $puppet::params::user,
+  $server_group                 = $puppet::params::group,
+  $server_dir                   = $puppet::params::dir,
+  $server_port                  = $puppet::params::port,
+  $server_vardir                = $puppet::params::server_vardir,
+  $server_ca                    = $puppet::params::server_ca,
+  $server_reports               = $puppet::params::server_reports,
+  $server_passenger             = $puppet::params::server_passenger,
+  $server_service_fallback      = $puppet::params::server_service_fallback,
+  $server_passenger_max_pool    = $puppet::params::server_passenger_max_pool,
+  $server_httpd_service         = $puppet::params::server_httpd_service,
+  $server_external_nodes        = $puppet::params::server_external_nodes,
+  $server_template              = $puppet::params::server_template,
+  $server_config_version        = $puppet::params::server_config_version,
+  $server_git_repo              = $puppet::params::server_git_repo,
+  $server_environments          = $puppet::params::server_environments,
+  $server_envs_dir              = $puppet::params::server_envs_dir,
+  $server_manifest_path         = $puppet::params::server_manifest_path,
+  $server_common_modules_path   = $puppet::params::server_common_modules_path,
+  $server_git_repo_path         = $puppet::params::server_git_repo_path,
+  $server_post_hook_content     = $puppet::params::server_post_hook_content,
+  $server_post_hook_name        = $puppet::params::server_post_hook_name,
+  $server_storeconfigs_backend  = $puppet::params::server_storeconfigs_backend,
+  $server_app_root              = $puppet::params::server_app_root,
+  $server_ssl_dir               = $puppet::params::server_ssl_dir,
+  $server_package               = $puppet::params::server_package,
+  $server_foreman_url           = $foreman::params::foreman_url,
+  $server_facts                 = $foreman::params::facts,
+  $server_puppet_home           = $foreman::params::puppet_home,
+  $server_puppet_basedir        = $foreman::params::puppet_basedir
 ) inherits puppet::params {
+
+  validate_bool($listen)
+  validate_bool($pluginsync)
+  validate_bool($splay)
+  validate_bool($agent_noop)
+  validate_bool($server)
+  validate_bool($server_ca)
+  validate_bool($server_passenger)
+  validate_bool($server_git_repo)
+  validate_bool($server_service_fallback)
+  validate_bool($server_facts)
 
   class { 'puppet::install': } ~>
   class { 'puppet::config': } ->
@@ -219,5 +231,4 @@ class puppet (
       require => Class['puppet::config'],
     }
   }
-
 }

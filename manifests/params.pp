@@ -16,7 +16,7 @@ class puppet::params {
   $runmode             = 'service'
   $agent_noop          = false
   $show_diff           = false
-  $ca_server           = false
+  $ca_server           = undef
 
   # Need your own config templates? Specify here:
   $agent_template  = 'puppet/puppet.conf.erb'
@@ -24,15 +24,15 @@ class puppet::params {
   $nsauth_template = 'puppet/namespaceauth.conf.erb'
 
   # Will this host be a puppetmaster?
-  $server                    = false
-  $server_vardir             = '/var/lib/puppet'
-  $server_ca                 = true
-  $server_reports            = 'foreman'
-  $server_passenger          = true
-  $server_service_fallback   = true
-  $server_passenger_max_pool = 12
-  $server_httpd_service      = 'httpd'
-  $server_external_nodes     = '/etc/puppet/node.rb'
+  $server                       = false
+  $server_vardir                = '/var/lib/puppet'
+  $server_ca                    = true
+  $server_reports               = 'foreman'
+  $server_passenger             = true
+  $server_service_fallback      = true
+  $server_passenger_max_pool    = 12
+  $server_httpd_service         = 'httpd'
+  $server_external_nodes        = '/etc/puppet/node.rb'
 
   # Need a new master template for the server?
   $server_template = 'puppet/server/puppet.conf.erb'
@@ -62,10 +62,10 @@ class puppet::params {
   $server_post_hook_name      = 'post-receive'
 
   # Do you use storeconfigs? (note: not required)
-  # - false if you don't
+  # - undef if you don't
   # - active_record for 2.X style db
   # - puppetdb for puppetdb
-  $server_storeconfigs_backend = false
+  $server_storeconfigs_backend = undef
 
   # Passenger config
   $server_app_root = "${dir}/rack"
