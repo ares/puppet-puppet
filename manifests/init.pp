@@ -222,6 +222,8 @@ class puppet (
   validate_bool($server_service_fallback)
   validate_bool($server_facts)
 
+  validate_string($server_external_nodes)
+
   class { 'puppet::install': } ~>
   class { 'puppet::config': } ->
   Class['puppet']
